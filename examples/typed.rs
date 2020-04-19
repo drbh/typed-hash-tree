@@ -1,3 +1,4 @@
+use typed_hash_tree::print::{pretty_print_tree, pretty_print_tree_bytes};
 use typed_hash_tree::*;
 
 fn main() {
@@ -33,48 +34,15 @@ fn main() {
     ];
 
     let levels = make_tree(&data);
-    //
-
-    let mut prelabel_levels = Vec::new();
-    let mut prelabel_leaves = Vec::new();
-
-    // make typed k/v's into hashes
-    // we H(type,value)
-    for _data in &data {
-        let _my_data = format!("{{ key = \"{}\", value = \"{}\" }}", _data.0, _data.1);
-        prelabel_leaves.push(_my_data)
-    }
-    prelabel_levels.push(prelabel_leaves.clone());
-
-    prelabel_leaves = get_prelabels_for_leaf_nodes(&data);
-    prelabel_levels.push(prelabel_leaves.clone());
-    while &prelabel_leaves.len() > &1 {
-        prelabel_leaves = get_prelabels_for_internal_nodes(prelabel_leaves);
-        prelabel_levels.push(prelabel_leaves.clone());
-    }
-    prelabel_levels.reverse();
-    // println!("{:#?}", prelabel_levels);
-    //
-    //
-
-    // for lvl in &levels {
-    //     println!("");
-    //     for lf in lvl {
-    //         println!("{:?}", encode(lf));
-    //     }
-    // }
+    let prelabel_levels = make_prelabel_tree(&data);
 
     println!("\nPrelabel Tree");
 
-    let tree_in_print_order = index_tree_prelabels(prelabel_levels.clone());
+    let tree_in_print_order = index_tree::<String>(prelabel_levels.clone());
     pretty_print_tree::<String>(tree_in_print_order, None);
 
-    // let tree_in_print_order = index_tree_prelabels(prelabel_levels.clone());
-    // pretty_print_tree::<String>(tree_in_print_order, Some(base64::encode));
+    println!("\n\nHash Tree");
 
-    println!("");
-    println!("\nHash Tree");
-
-    let tree_in_print_order = index_tree(levels);
+    let tree_in_print_order = index_tree::<[u8; 32]>(levels);
     pretty_print_tree_bytes::<[u8; 32]>(tree_in_print_order, Some(base64::encode));
 }

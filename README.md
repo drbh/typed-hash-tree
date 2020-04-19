@@ -12,6 +12,8 @@ cargo run --example typed
 
 In a typed hash tree, each input keypair needs a secondary random string value `{ type = "", value = "RANDOM-VALUE"}` to make the tree brute force resistent.
 
+The following are the 8 leaf nodes we will be using in the example
+
 ```rust
 // pair 1
 { key = "name", value = "David" }
@@ -50,7 +52,7 @@ Hash Tree
 
 # Walkthrough
 
-First thing we need to specify a set of keypairs we'd like to encode with a tree. All of the examples currently use the same set of keypairs as noted above.
+We'll need to specify a set of keypairs we'd like to encode with a tree. All of the examples currently use the same set of keypairs as noted above.
 
 We'll also highlight through out the following images so it's easier to see how the data is hashed.
 <img src="images/labels.png"/>
