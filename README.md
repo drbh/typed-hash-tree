@@ -1,4 +1,4 @@
-## Typed Hash Trees
+# Typed Hash Trees
 
 Welcome to typed hash trees.
 
@@ -35,31 +35,37 @@ Hash Tree
     ├─  IRU6xGdD7XnoroFyv60Wok6W2v/8j58JrAJlgf0bt6Y=
     │   ├─  eo4CGGM4qa2lVsc7uV9XB1NNJgxim8H85ezR0opZoOU=
     │   │   ├─  VxWF6Xxj0z1RR6mqXjyRspAQXazb+ZHNpoM93Ibzg6E=
-    │   │   ├─  j2eEc0oqJvluyDaHnGk5Gd6QvRkjEq52C8tiUUfHayw=
+    │   │   ╰─  j2eEc0oqJvluyDaHnGk5Gd6QvRkjEq52C8tiUUfHayw=
     │   ├─  svPkyQLxLCJPBcJ/4xAiB1l3mTlnBigafsQBnd1JNqg=
     │   │   ├─  G5AYuX9soGTM01fhHirHUz1ycekLpVPaqV/KHb7KfGs=
-    │   │   ├─  agWMOAOQqNKufx/IWw+6JDDZswrXSuk0uK52GejaBIM=
+    │   │   ╰─  agWMOAOQqNKufx/IWw+6JDDZswrXSuk0uK52GejaBIM=
     ╰─  3iGiQp1AdoGIPfV6juC8T6cPfnwHDtI0kwvyGhCIprc=
         ├─  7gTqvwRD/wjtDJQXVTxjZ2+OWIth1HSR0lySmujv750=
         │   ├─  eRpsch+mjWR0BXhFPGxh4Aw5Cm4ai27PmnylfpUco6g=
-        │   ├─  yXJ1mx0fHzcbOjSiOGl2rUIYO6hF9iR4cuC+Ny6Uq40=
+        │   ╰─  yXJ1mx0fHzcbOjSiOGl2rUIYO6hF9iR4cuC+Ny6Uq40=
         ╰─  NZTLnI4XhCp++baktHiGsScbzFJx0QUqhS2/vwmcAfA=
             ├─  WXxPNc7xZ69EC/WtVuFW+uswI7wzL3ujozRDbM8122g=
             ╰─  HfeH+//BP3Z06cfCHu2mW442IM1Dv3+ZyX4d1VdSi4c=
 ```
 
-### Logic walkthrough
+# Walkthrough
 
 Firs thing we need to specify a set of keypairs we'd like to encode with a tree. All of the examples currently use the same set of keypairs as noted above.
 
 We'll also highlight through out the following images so it's easier to see how the data is hashed.
 <img src="images/labels.png"/>
 
+#### The tree
+
 Taking the keypairs, we'll want to construct a tree from these 8 bottom nodes (4 keypairs, 4 random value types).
+
 <img src="images/tree1.png"/>
 
 Now that we know what structure we are going to build, the highlighting of internal nodes is helpful for understanding where the following text output is located in the tree.
+
 <img src="images/tree2.png"/>
+
+#### Constructing prelabels
 
 When construting the first level up from a tree, well want to take the two children - create prelabels - concatenate them together - hash them and encode the output in a serializable format.
 
@@ -87,9 +93,24 @@ This does impact the trees output, but for these early demonstrations it makes i
 
 <img src="images/step1.png"/>
 
-If we follow the prelabels color to it's parents prelabel, we can see how the values are hashed, encoded and then included in the prelabel
+If we follow the prelabels color to it's parents prelabel, we can see how the values are hashed, encoded and then included in the prelabel.  
 <img src="images/step2.png"/>
 
 We repeat the process up the tree. Using the parent lables we generated in their parents labels.
+
 <img src="images/step3.png"/>
+
+Finally we can use the last 2 internal nodes to create the prelabel and label for the root! You should be able to validate any of these pre-label -> hash values by hashing the prelabel and encoding in base64.
+
 <img src="images/step4.png"/>
+
+Heres a python snippet to check the roots prelabel
+
+```python
+import base64
+import hashlib
+
+base64.b64encode(hashlib.sha256("[0]-[]-[32]-[IRU6xGdD7XnoroFyv60Wok6W2v/8j58JrAJlgf0bt6Y=][0]-[]-[32]-[3iGiQp1AdoGIPfV6juC8T6cPfnwHDtI0kwvyGhCIprc=]".encode()).digest())
+
+# b'BimO2+ZFmsmi5Zq1vshaZajKwO2yj24gPlJ6rOXjNo4='
+```
