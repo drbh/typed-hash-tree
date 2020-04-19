@@ -50,7 +50,7 @@ Hash Tree
 
 # Walkthrough
 
-Firs thing we need to specify a set of keypairs we'd like to encode with a tree. All of the examples currently use the same set of keypairs as noted above.
+First thing we need to specify a set of keypairs we'd like to encode with a tree. All of the examples currently use the same set of keypairs as noted above.
 
 We'll also highlight through out the following images so it's easier to see how the data is hashed.
 <img src="images/labels.png"/>
